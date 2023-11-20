@@ -1,0 +1,195 @@
+@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap');
+
+p, h1, h2, h3, h4, h5, h6, ul, a {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-decoration: none;
+}
+
+
+body {
+    margin: 0 auto;
+    background-image: url("/static/img/back.jpg");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    margin: auto;
+}
+
+/* HOME PAGE - HEADER */
+
+header {
+    position: fixed;
+    width: 100%;
+    z-index: 100;
+    top: 0;
+    border-bottom: 3px solid #000;
+    background-image: linear-gradient(to right, #aaaadd, #333);
+    /* box-shadow: 2px 2px #333; */
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+    text-align: center;
+    color: #ddd;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 50px;
+    align-items: center;
+    overflow: auto;
+}
+
+.nav_left {
+    font-family: 'Patrick Hand', cursive;
+}
+
+.nav_right {
+    width: 30%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    
+}
+
+.nav_btn>a{
+    color: #ddd;
+}
+
+.search-btn {
+    display: inline-block;
+}
+
+.nav_img {
+    width: 70%;
+}
+
+.search-holder {
+    top: 100%;
+    left: 0;
+    z-index: 1;
+}
+
+.search-holder.form-visible {
+    display: block;
+}
+
+#search-list {
+    display: none;
+    list-style-type: none;
+}
+
+section {
+    position: relative;
+    max-width: 1600px;
+    width: 100%;
+    margin: auto;
+}
+
+/* HOME PAGE - BODY */
+
+.all_artists {
+    padding-top: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.artist {
+    width: 300px;
+    background-image: linear-gradient(180deg, rgba(170, 170, 221, 0.6), rgba(221, 221, 221, 0.8));
+    border-radius: 5%;
+    margin: 5px;
+    padding: 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+}
+
+.info_top {
+    text-align: center;
+}
+
+.info_bottom>p,a{
+    color: #dfaf;
+    text-align: center;
+    cursor: pointer;
+    
+}
+
+.artist-img {
+    margin-bottom: 15px;
+    border: 1px solid floralwhite;
+}
+
+.artist-img:hover {
+    box-shadow: 1px 2px 3px #aaaadd;
+    filter: brightness(0.7);
+}
+
+.info_bottom:hover .tooltip-content {
+    display: block;
+}
+
+.tooltip-content {
+    display: none;
+    position: absolute;
+    padding: 5px;
+    background-color: #333;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+/* footer {
+    background-image: linear-gradient(to left, #333, #000);
+    border-top: 1px 1px gray;
+    padding-top: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #ddd;
+}
+ */
+
+ /* ARTIST PAGE */
+
+
+ .artist-container {
+    max-width: 500px;
+    width: 100%;
+    background-image: linear-gradient(180deg, rgba(170, 170, 221, 0.6), rgba(221, 221, 221, 0.8));
+    border-radius: 5%;
+    margin: auto;
+    margin-top: 10vh;
+    padding: 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+ }
+
+ .artist-top {
+    display: flex;
+    align-items: center;
+ }
+
+ .artist-top>img {
+    margin: 0 50px 20px 0;
+ }
+
+ .vl {
+    border-left: 6px solid #222;
+    height: 500px;
+}
+
+ .artist-bottom {
+    display: flex;
+    justify-content: space-between;
+ }
