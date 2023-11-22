@@ -3,6 +3,13 @@ package logger
 import (
 	"io"
 	"log"
+	"os"
+)
+
+const (
+	Red    = "\033[0;31mERROR:\033[0m\t"
+	Green  = "\033[0;32mINFO:\033[0m\t"
+	Yellow = "\033[0;33mFATAL:\033[0m\t"
 )
 
 type Logger struct {
@@ -14,10 +21,13 @@ type Logger struct {
 // InitLogger returns a new Logger instance.
 // out is the io.Writer to which the log output will be written.
 func InitLogger(out io.Writer) *Logger {
+	if out == nil {
+		out = os.Stdout
+	}
 	logger := &Logger{}
-	logger.info = log.New(out, "INFO: ", log.LstdFlags)
-	logger.error = log.New(out, "ERROR: ", log.LstdFlags|log.Llongfile)
-	logger.fatal = log.New(out, "FATAL: ", log.LstdFlags|log.Llongfile)
+	logger.info = log.New(out, Green, log.LstdFlags)
+	logger.error = log.New(out, Red, log.LstdFlags)
+	logger.fatal = log.New(out, Yellow, log.LstdFlags)
 	return logger
 }
 
