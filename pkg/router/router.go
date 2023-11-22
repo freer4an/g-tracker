@@ -18,7 +18,6 @@ type Router struct {
 }
 
 // type HttpLogger func(http.HandlerFunc) http.HandlerFunc
-
 func NewRouter() *Router {
 	return &Router{
 		routes: []*Route{},
