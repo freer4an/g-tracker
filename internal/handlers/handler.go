@@ -6,14 +6,16 @@ import (
 	"github.com/freer4an/groupie-tracker/pkg/logger"
 )
 
+var (
+	temp = template.Must(template.ParseGlob("client/templates/*.html"))
+)
+
 type Handler struct {
-	log  *logger.Logger
-	temp *template.Template
+	log *logger.Logger
 }
 
-func NewHandler(log *logger.Logger, temp *template.Template) *Handler {
+func NewHandler(log *logger.Logger) *Handler {
 	return &Handler{
-		log:  log,
-		temp: temp,
+		log: log,
 	}
 }
