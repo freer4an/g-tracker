@@ -7,7 +7,8 @@ type Route struct {
 	Pattern     string
 	Query       string
 	middlewares []MiddlewareFunc
-	Handler     http.HandlerFunc
+	Handler     http.Handler
+	isStatic    bool
 }
 
 type MiddlewareFunc func(http.HandlerFunc) http.HandlerFunc

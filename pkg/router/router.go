@@ -3,6 +3,7 @@ package router
 import (
 	"fmt"
 	"net/http"
+	"strings"
 )
 
 const (
@@ -16,7 +17,7 @@ type Router struct {
 	routes []*Route
 }
 
-type HttpLogger func(http.HandlerFunc) http.HandlerFunc
+// type HttpLogger func(http.HandlerFunc) http.HandlerFunc
 
 func NewRouter() *Router {
 	return &Router{
@@ -25,7 +26,7 @@ func NewRouter() *Router {
 }
 
 // Add adds a new route with the specified method, pattern and handler.
-func (r *Router) Add(method, pattern string, handler http.HandlerFunc) *Route {
+func (r *Router) AddRoute(method, pattern string, handler http.HandlerFunc) *Route {
 	if method != MethodGet && method != MethodPost && method != MethodPut && method != MethodDelete {
 		panic("invalid method")
 	}
@@ -38,13 +39,22 @@ func (r *Router) Add(method, pattern string, handler http.HandlerFunc) *Route {
 	return route
 }
 
+func (r *Router) ServeStatic(pattern string, handler http.Handler) {
+	r.AddRoute(MethodGet, pattern, handler.ServeHTTP).isStatic = true
+}
+
 // ServeHTTP implements the http.Handler interface.
 func (r *Router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	for _, route := range r.routes {
-		if route.Method == req.Method && route.Pattern == req.URL.Path {
-			for _, middleware := range route.middlewares {
-				route.Handler = middleware(route.Handler)
-			}
+		if route.isStatic && strings.HasPrefix(req.URL.Path, route.Pattern) {
+			route.Handler.ServeHTTP(w, req)
+			return
+		}
+		// re := regexp.MustCompile(route.Pattern)
+		if route.Method == req.Method && (route.Pattern == req.URL.Path) {
+			// for _, middleware := range route.middlewares {
+			// 	route.Handler = middleware(route.Handler)
+			// }
 			route.Handler.ServeHTTP(w, req)
 			return
 		}
@@ -53,17 +63,11 @@ func (r *Router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	http.Error(w, response, http.StatusNotFound)
 }
 
-func (r *Router) AddLogger(handler HttpLogger) {
-	for _, route := range r.routes {
-		if route.middlewares != nil {
-			panic("Logger should be used first")
-		}
-		route.Use(MiddlewareFunc(handler))
-	}
-}
-
-func (r *Router) Routes() {
-	for _, route := range r.routes {
-		fmt.Printf("%+v\n", route)
-	}
-}
+// func (r *Router) AddLogger(handler HttpLogger) {
+// 	for _, route := range r.routes {
+// 		if route.middlewares != nil {
+// 			panic("Logger should be used first and once only")
+// 		}
+// 		route.Use(MiddlewareFunc(handler))
+// 	}
+// }
