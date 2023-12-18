@@ -7,15 +7,13 @@ import (
 )
 
 const (
-	Red    = "\033[0;31mERROR:\033[0m\t"
+	Red    = "\033[0;31mFATAL:\033[0m\t"
 	Green  = "\033[0;32mINFO:\033[0m\t"
-	Yellow = "\033[0;33mFATAL:\033[0m\t"
+	Yellow = "\033[0;33mERROR:\033[0m\t"
 )
 
 type Logger struct {
-	info  *log.Logger
-	error *log.Logger
-	fatal *log.Logger
+	log *log.Logger
 }
 
 // InitLogger returns a new Logger instance.
@@ -24,25 +22,29 @@ func InitLogger(out io.Writer) *Logger {
 	if out == nil {
 		out = os.Stdout
 	}
+
 	logger := &Logger{}
-	logger.info = log.New(out, Green, log.LstdFlags)
-	logger.error = log.New(out, Red, log.LstdFlags)
-	logger.fatal = log.New(out, Yellow, log.LstdFlags)
+	logger.log = log.New(out, "", log.LstdFlags)
 	return logger
+}
+
+// Info writes a log message with the info level.
+func (l *Logger) Info(msg string) {
+	l.log.Println(Green, msg)
 }
 
 // Infof writes a formatted log message with the info level.
 func (l *Logger) Infof(format string, v ...interface{}) {
-	l.info.Printf(format, v...)
+	l.log.Printf(Green+format, v...)
 }
 
 // Errorf prints a formatted error message to the logger's error output.
 func (l *Logger) Errorf(format string, v ...interface{}) {
-	l.error.Printf(format, v...)
+	l.log.Printf(Yellow+format, v...)
 }
 
 // Fatalf prints a formatted error message to the logger's error output.
 // NOTE: it then calls os.Exit(1).
 func (l *Logger) Fatalf(format string, v ...interface{}) {
-	l.fatal.Fatalf(format, v...)
+	l.log.Fatalf(Red+format, v...)
 }
