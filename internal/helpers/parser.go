@@ -2,7 +2,7 @@ package helpers
 
 import (
 	"encoding/json"
-	"log/slog"
+	"log"
 	"net/http"
 )
 
@@ -15,7 +15,7 @@ func ParseAPI(url string, n any) error {
 	defer func() {
 		err := resp.Body.Close()
 		if err != nil {
-			slog.Warn("Parse error: %w", err)
+			log.Printf("Response body closing error: %v", err)
 		}
 	}()
 
