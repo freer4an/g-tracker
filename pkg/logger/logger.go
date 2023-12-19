@@ -7,9 +7,9 @@ import (
 )
 
 const (
-	Red    = "\033[0;31mFATAL:\033[0m\t"
-	Green  = "\033[0;32mINFO:\033[0m\t"
-	Yellow = "\033[0;33mERROR:\033[0m\t"
+	Red    = "\t\033[0;31mFATAL:\033[0m\t"
+	Green  = "\t\033[0;32mINFO:\033[0m\t"
+	Yellow = "\t\033[0;33mERROR:\033[0m\t"
 )
 
 type Logger struct {
