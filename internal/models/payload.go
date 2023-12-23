@@ -65,10 +65,10 @@ func updateChecker() {
 		}
 		if data.len != apiData.len {
 			apiData.mu.Lock()
+			defer apiData.mu.Unlock()
 			if err := apiData.fill(); err != nil {
 				return
 			}
-			apiData.mu.Unlock()
 		}
 	default:
 		return
