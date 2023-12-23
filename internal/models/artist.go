@@ -18,10 +18,10 @@ type Artist struct {
 }
 
 func (a *Artist) DatesLocations() (*Relation, error) {
-	if a.Relations == "" {
-		return nil, nil
-	}
 	rel := &Relation{}
+	if a.Relations == "" {
+		return rel, nil
+	}
 	if err := helpers.ParseAPI(a.Relations, &rel); err != nil {
 		return nil, fmt.Errorf("Parse error: %w", err)
 	}

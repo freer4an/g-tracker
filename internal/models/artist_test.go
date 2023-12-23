@@ -6,10 +6,6 @@ import (
 	"github.com/freer4an/groupie-tracker/internal/helpers"
 )
 
-const (
-	url = "https://groupietrackers.herokuapp.com/api/artists"
-)
-
 func TestArtist_DatesLocations(t *testing.T) {
 	artists := getArtists(t)
 
@@ -55,7 +51,7 @@ func TestArtist_DatesLocations(t *testing.T) {
 
 func getArtists(t *testing.T) []Artist {
 	var artists []Artist
-	if err := helpers.ParseAPI(url, &artists); err != nil {
+	if err := helpers.ParseAPI(apiURL+artistURL, &artists); err != nil {
 		t.Errorf("Parse error: %v", err)
 		t.FailNow()
 	}

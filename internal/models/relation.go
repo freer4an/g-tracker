@@ -3,9 +3,12 @@ package models
 import "sort"
 
 type Relation struct {
-	// DatesLocations map[string][]string `json:"datesLocations"`
 	ID             int                 `json:"id"`
 	DatesLocations map[string][]string `json:"datesLocations"`
+}
+
+type Relations struct {
+	Index []Relation
 }
 
 func (r *Relation) Locations() []string {
