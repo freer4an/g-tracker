@@ -36,7 +36,7 @@ func GetHomeData() (*clientData, error) {
 	return data, nil
 }
 
-func GetArtistData(id int) (*clientData, error) {
+func GetBandData(id int) (*clientData, error) {
 	if apiData == nil {
 		apiData = new(api)
 		if err := apiData.fill(); err != nil {
