@@ -11,7 +11,7 @@ func TestArtist_DatesLocations(t *testing.T) {
 
 	tests := []struct {
 		name    string
-		fields  Artist
+		fields  Band
 		want    int // len(rel.DatesLocations)
 		wantErr bool
 	}{
@@ -28,7 +28,7 @@ func TestArtist_DatesLocations(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			a := &Artist{
+			a := &Band{
 				ID:           tt.fields.ID,
 				Image:        tt.fields.Image,
 				Name:         tt.fields.Name,
@@ -49,11 +49,11 @@ func TestArtist_DatesLocations(t *testing.T) {
 	}
 }
 
-func getArtists(t *testing.T) []Artist {
-	var artists []Artist
-	if err := helpers.ParseAPI(apiURL+artistURL, &artists); err != nil {
+func getArtists(t *testing.T) []Band {
+	var bands []Band
+	if err := helpers.ParseAPI(apiURL+artistURL, &bands); err != nil {
 		t.Errorf("Parse error: %v", err)
 		t.FailNow()
 	}
-	return artists
+	return bands
 }

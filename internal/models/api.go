@@ -18,10 +18,10 @@ var (
 )
 
 type api struct {
-	Artists  []Artist
-	Relation []Relation
-	len      int
-	mu       sync.Mutex
+	Bands     []Band
+	Relations []Relation
+	len       int
+	mu        sync.Mutex
 }
 
 func (d *api) CheckID(index int) bool {
@@ -31,18 +31,18 @@ func (d *api) CheckID(index int) bool {
 func (data *api) fill() error {
 	data.mu.Lock()
 	defer data.mu.Unlock()
-	if data.Artists != nil && data.Relation != nil {
+	if data.Bands != nil && data.Relations != nil {
 		return nil
 	}
 
 	var rel Relations
-	if err := helpers.ParseAPI(apiURL+artistURL, &data.Artists); err != nil {
-		return fmt.Errorf("Artists parse error: %w", err)
+	if err := helpers.ParseAPI(apiURL+artistURL, &data.Bands); err != nil {
+		return fmt.Errorf("Bands parse error: %w", err)
 	}
 	if err := helpers.ParseAPI(apiURL+relationURL, &rel); err != nil {
-		return fmt.Errorf("Relation parse error: %w", err)
+		return fmt.Errorf("Relations parse error: %w", err)
 	}
-	data.Relation = rel.Index
-	data.len = len(data.Artists)
+	data.Relations = rel.Index
+	data.len = len(data.Bands)
 	return nil
 }

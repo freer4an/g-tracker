@@ -6,7 +6,7 @@ import (
 	"github.com/freer4an/groupie-tracker/internal/helpers"
 )
 
-type Artist struct {
+type Band struct {
 	ID           int      `json:"id"`
 	Image        string   `json:"image"`
 	Name         string   `json:"name"`
@@ -17,7 +17,7 @@ type Artist struct {
 	Relations    string   `json:"relations"`
 }
 
-func (a *Artist) DatesLocations() (*Relation, error) {
+func (a *Band) DatesLocations() (*Relation, error) {
 	rel := &Relation{}
 	if a.Relations == "" {
 		return rel, nil
