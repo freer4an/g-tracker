@@ -10,9 +10,8 @@ import (
 )
 
 func (h *Handler) Home(w http.ResponseWriter, r *http.Request) {
-	var data models.HomeData
 	var buf bytes.Buffer
-	err := data.FillArists()
+	data, err := models.GetHomeData()
 	if err != nil {
 		h.errorResponse(w, err, http.StatusInternalServerError)
 		return
