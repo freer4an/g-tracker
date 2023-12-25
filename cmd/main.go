@@ -12,12 +12,11 @@ import (
 )
 
 const (
-	url  = "https://groupietrackers.herokuapp.com/api/artists"
 	port = "8000"
 )
 
 func main() {
-	logger := logger.InitLogger(os.Stderr)
+	logger := logger.InitLogger(os.Stdout)
 	err := RunApp(logger)
 	if err != nil {
 		logger.Fatalf("RunApp: %v", err)
@@ -25,11 +24,11 @@ func main() {
 }
 
 func RunApp(logger *logger.Logger) error {
-	handler := handlers.NewHandler(logger, nil)
-	mux := initRoutes(handler)
-	fmt.Println("Launching http://localhost:" + port)
+	handler := handlers.NewHandler(logger)
+	r := initRoutes(handler)
+	logger.Infof("Launching http://localhost:" + port)
 	go func() {
-		err := http.ListenAndServe(fmt.Sprintf(":%s", port), mux)
+		err := http.ListenAndServe(fmt.Sprintf(":%s", port), r)
 		if err != nil {
 			logger.Fatalf("ListenAndServe error: %v", err)
 		}
@@ -37,16 +36,14 @@ func RunApp(logger *logger.Logger) error {
 	quit := make(chan os.Signal)
 	signal.Notify(quit, os.Interrupt, os.Kill)
 	<-quit
-
+	logger.Infof("Shutdown Server ...")
 	return nil
 }
 
 func initRoutes(h *handlers.Handler) *router.Router {
 	r := router.NewRouter()
-	r.Add("GET", "/", h.Home).Use(h.Context)
-	r.Routes()
-	// fs := http.FileServer(http.Dir("static"))
-	// mux.Handle("/static/", http.StripPrefix("/static", fs))
-
+	r.AddRoute("GET", "/", h.Home)
+	fs := http.FileServer(http.Dir("client/static"))
+	r.ServeStatic("/static/", http.StripPrefix("/static", fs))
 	return r
 }
