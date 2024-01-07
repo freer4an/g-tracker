@@ -25,10 +25,10 @@ func NewRouter() *Router {
 }
 
 // Add adds a new route with the specified method, pattern and handler.
-func (r *Router) AddRoute(method, pattern string, handler http.HandlerFunc) *Route {
-	if method != MethodGet && method != MethodPost && method != MethodPut && method != MethodDelete {
-		panic("invalid method")
-	}
+func (r *Router) addRoute(method, pattern string, handler http.HandlerFunc) *Route {
+	// if method != MethodGet && method != MethodPost && method != MethodPut && method != MethodDelete {
+	// 	panic("invalid method")
+	// }
 	route := &Route{
 		Method:  method,
 		Pattern: pattern,
@@ -38,8 +38,24 @@ func (r *Router) AddRoute(method, pattern string, handler http.HandlerFunc) *Rou
 	return route
 }
 
+func (r *Router) Get(pattern string, handler http.HandlerFunc) *Route {
+	return r.addRoute(MethodGet, pattern, handler)
+}
+
+func (r *Router) Post(pattern string, handler http.HandlerFunc) *Route {
+	return r.addRoute(MethodPost, pattern, handler)
+}
+
+func (r *Router) Put(pattern string, handler http.HandlerFunc) *Route {
+	return r.addRoute(MethodPut, pattern, handler)
+}
+
+func (r *Router) Delete(pattern string, handler http.HandlerFunc) *Route {
+	return r.addRoute(MethodDelete, pattern, handler)
+}
+
 func (r *Router) ServeStatic(pattern string, handler http.Handler) {
-	r.AddRoute(MethodGet, pattern, handler.ServeHTTP).isStatic = true
+	r.addRoute(MethodGet, pattern, handler.ServeHTTP).isStatic = true
 }
 
 // ServeHTTP implements the http.Handler interface.
