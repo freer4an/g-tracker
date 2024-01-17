@@ -1,8 +1,9 @@
 package router
 
 import (
-	"fmt"
+	"context"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -12,6 +13,8 @@ const (
 	MethodPut    = "PUT"
 	MethodDelete = "DELETE"
 )
+
+var paramsKey = struct{}{}
 
 type Router struct {
 	routes []*Route
@@ -29,12 +32,28 @@ func (r *Router) addRoute(method, pattern string, handler http.HandlerFunc) *Rou
 	// if method != MethodGet && method != MethodPost && method != MethodPut && method != MethodDelete {
 	// 	panic("invalid method")
 	// }
-	route := &Route{
-		Method:  method,
-		Pattern: pattern,
-		Handler: handler,
+	var routeParams []routeParam
+
+	patternSlc := strings.Split(pattern, "/")
+	for i := 0; i < len(patternSlc); i++ {
+		var rParam routeParam
+		if len(patternSlc[i]) == 0 {
+			continue
+		}
+		if patternSlc[i][0] == ':' {
+			rParam.key = patternSlc[i][1:]
+			if len(rParam.key) == 0 {
+				panic("invalid pattern")
+			}
+			rParam.index = i
+			routeParams = append(routeParams, rParam)
+			patternSlc[i] = ":"
+		}
 	}
+	pattern = strings.Join(patternSlc, "/")
+	route := newRoute(method, pattern, patternSlc, routeParams, handler)
 	r.routes = append(r.routes, route)
+	route.Describe()
 	return route
 }
 
@@ -65,17 +84,35 @@ func (r *Router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			route.Handler.ServeHTTP(w, req)
 			return
 		}
+		// TODO: QUERY detector RouteMatcher
 		// re := regexp.MustCompile(route.Pattern)
-		if route.Method == req.Method && (route.Pattern == req.URL.Path) {
-			// for _, middleware := range route.middlewares {
-			// 	route.Handler = middleware(route.Handler)
-			// }
+		// if (route.Method == req.Method && (route.Pattern == req.URL.Path)) || (route.RouteQuery != "" && re.MatchString(req.URL.Path)) {
+		// 	// for _, middleware := range route.middlewares {
+		// 	// 	route.Handler = middleware(route.Handler)
+		// 	// }
+		// 	if route.RouteQuery != "" {
+		// 		i := strings.Index(req.URL.Path, route.RouteQuery)
+		// 		fmt.Println(req.URL.Path, i)
+		// 		return
+		// 		ctx := context.WithValue(req.Context(), "id", req.URL.Path[i:])
+		// 		req = req.WithContext(ctx)
+		// 		fmt.Println(req.URL.Path[i:])
+		// 	}
+		// 	route.Handler.ServeHTTP(w, req)
+		// 	return
+		// }
+		if !route.matchRoute(req.Method, req.URL.Path) {
+			continue
+		}
+		if len(route.RouteParams) == 0 {
 			route.Handler.ServeHTTP(w, req)
 			return
 		}
+		ctx := context.WithValue(req.Context(), paramsKey, route.RouteParams)
+		route.Handler.ServeHTTP(w, req.WithContext(ctx))
+		return
 	}
-	response := fmt.Sprintf("%v - %s", http.StatusNotFound, http.StatusText(http.StatusNotFound))
-	http.Error(w, response, http.StatusNotFound)
+	http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
 }
 
 // func (r *Router) AddLogger(handler HttpLogger) {
@@ -86,3 +123,29 @@ func (r *Router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 // 		route.Use(MiddlewareFunc(handler))
 // 	}
 // }
+
+func paramsList(ctx context.Context) RouteParams {
+	p, _ := ctx.Value(paramsKey).(RouteParams)
+	return p
+}
+
+func GetParam(ctx context.Context, key string) string {
+	p := paramsList(ctx)
+	for _, param := range p {
+		if param.key == key {
+			return param.value
+		}
+	}
+	return ""
+}
+
+func GetParamInt(ctx context.Context, key string) int {
+	p := paramsList(ctx)
+	for _, param := range p {
+		if param.key == key {
+			i, _ := strconv.Atoi(param.value)
+			return i
+		}
+	}
+	return 0
+}
