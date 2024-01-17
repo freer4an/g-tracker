@@ -13,7 +13,7 @@ func (h *Handler) errorResponse(w http.ResponseWriter, err error, code int) {
 	h.log.Errorf("%s", err)
 	switch {
 	case errors.Is(err, ErrTemplate):
-		http.Error(w, ErrTemplate.Error(), code)
+		http.Error(w, "Client error", code)
 	default:
 		http.Error(w, errors.Unwrap(err).Error(), code)
 	}

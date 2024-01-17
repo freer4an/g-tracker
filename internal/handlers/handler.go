@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	temp = template.Must(template.ParseGlob("client/templates/*.html"))
+	temp = template.Must(template.ParseGlob("front/templates/*.html"))
 )
 
 type Handler struct {
