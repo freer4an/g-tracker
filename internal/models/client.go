@@ -11,10 +11,9 @@ import (
 var ticker = time.Tick(10 * time.Second)
 
 type clientData struct {
-	API       *api
-	ArtistURL string
-	Band      Band
-	Relation  Relation
+	API      *api
+	Band     Band
+	Relation Relation
 }
 
 func GetHomeData() (*clientData, error) {
@@ -28,10 +27,7 @@ func GetHomeData() (*clientData, error) {
 		}
 	}
 
-	data := &clientData{
-		API:       apiData,
-		ArtistURL: artistURL,
-	}
+	data := &clientData{API: apiData}
 
 	return data, nil
 }
