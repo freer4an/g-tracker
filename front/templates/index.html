@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/index.css">
     <link rel="shortcut icon" href="/static/img/favicon.png">
     <script src="/static/js/script.js"></script>
     <title>Groupie-Tracker</title>
@@ -12,15 +13,20 @@
 <body>
     {{ $rels := .API.Relations }}
     <header>
-
+        <div class="header-icon">
+            <h1>Groupie-Tracker</h1>
+        </div>
+        <div class="navbar">
+            <input type="text" id="search" placeholder="Search...">
+            <button id="search-button">Search</button>
+            <button id="reset-button">Reset</button>
+        </div>
     </header>
     <section id="container">
         {{range $index, $band := .API.Bands}}
         <div class="container-band">
-            <div class="band-main">
-                {{template "Band" $band}}
-            </div>
-            <div class="band-relations" hidden>
+            {{template "Band" $band}}
+            <div class="band-relations">
                 {{template "Relations" (index $rels $index) }}
             </div>
         </div>

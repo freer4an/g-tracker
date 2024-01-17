@@ -1,5 +1,33 @@
-{{ define "Band" }}
-<a href="band/{{ .ID }}"></a>
-<img src="{{ .Image }}" alt="{{ .Name }}">
-<h1>{{ .Name }}</h1>
-{{ end }}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/index.css">
+    <link rel="shortcut icon" href="/static/img/favicon.png">
+    <script src="/static/js/script.js"></script>
+    <title>Groupie-Tracker</title>
+</head>
+<body>
+    {{ define "Band" }}
+    <a href="band/{{ .ID }}" class="band-image">
+        <img src="{{ .Image }}" alt="{{ .Name }}">
+    </a>
+    <h1>{{ .Name }}</h1>
+    <div class="band-info">
+        <div class="band-members">
+            {{range .Members}}
+            <p>{{.}}</p>
+            {{end}}
+        </div>
+        <div class="band-dates">
+            <p>{{.CreationDate}}</p>
+            <p>{{.FirstAlbum}}</p>
+        </div>
+    </div>
+    {{end}}
+    {{ template "Band" .Band}}
+</body>
+</html>

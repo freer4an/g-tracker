@@ -1,0 +1,17 @@
+a {
+    text-decoration: none;
+}
+
+header {
+    display: flex;
+    justify-content: space-around;
+}
+
+#navbar {
+    margin: 0 auto;
+    max-width: 1600px;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}

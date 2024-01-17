@@ -1,10 +1,16 @@
 {{define "Relations"}}
+<ul>
     {{range $location, $dates := .DatesLocations}}
-    <div class="relation-locations">
+    <li class="relation-location">
         {{$location}}
-    </div>
-    <div class="relation-dates">
-        {{$dates}}
-    </div>
+        <ul>
+            <li class="relation-dates">
+                {{range $dates}}
+                    <p>{{.}}</p>
+                {{end}}
+            </li>
+        </ul>
+    </li>
     {{end}}
+</ul>
 {{end}}

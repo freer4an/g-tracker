@@ -1,0 +1,39 @@
+#container {
+    margin: 0 auto;
+    max-width: 1600px;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
+}
+
+.container-band {
+    border: 1px solid #ccc;
+    text-align: center;
+    word-wrap: break-word;
+}
+
+.container-band h1 {
+    overflow-wrap: break-word;
+}
+
+.band-info {
+    display: none;
+}
+
+.band-relations {
+    margin-top: 10px;
+    padding: 5px;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    display: none; 
+}
+
+/* .container-band:hover .band-relations {
+    display: block;
+} */
+
+.container-band {
+    border: 1px solid #ddd;
+}
+
