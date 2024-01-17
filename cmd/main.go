@@ -42,8 +42,9 @@ func RunApp(logger *logger.Logger) error {
 
 func initRoutes(h *handlers.Handler) *router.Router {
 	r := router.NewRouter()
-	r.AddRoute("GET", "/", h.Home)
-	fs := http.FileServer(http.Dir("client/static"))
+	fs := http.FileServer(http.Dir("front/static"))
 	r.ServeStatic("/static/", http.StripPrefix("/static", fs))
+	r.Get("/", h.Home)
+	r.Get("/band/:id", h.BandHandler)
 	return r
 }
