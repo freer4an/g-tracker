@@ -14,7 +14,7 @@ func (h *Handler) BandHandler(w http.ResponseWriter, req *http.Request) {
 	id := router.GetParamInt(req.Context(), "id")
 	data, err := models.GetBandData(id)
 	if err != nil {
-		h.errorResponse(w, err, http.StatusInternalServerError)
+		h.errorResponse(w, err, http.StatusNotFound)
 		return
 	}
 	if err := temp.ExecuteTemplate(&buf, "band.html", data); err != nil {

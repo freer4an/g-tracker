@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"bytes"
-	"context"
 	"errors"
 	"net/http"
 
@@ -16,6 +15,22 @@ func (h *Handler) Home(w http.ResponseWriter, r *http.Request) {
 		h.errorResponse(w, err, http.StatusInternalServerError)
 		return
 	}
+
+	// handle search param request
+	search := r.URL.Query().Get("search")
+	if search != "" {
+		h.search(search, w, r)
+		return
+	}
+
+	// handle filter param request
+	filter := r.URL.Query().Get("filter")
+	if filter != "" {
+		h.filter(filter, w, err, http.StatusInternalServerError)
+		return
+	}
+
+	// handle no params
 	if err := temp.ExecuteTemplate(&buf, "index.html", data); err != nil {
 		h.errorResponse(w, errors.Join(err, ErrTemplate), http.StatusInternalServerError)
 		return
@@ -24,9 +39,10 @@ func (h *Handler) Home(w http.ResponseWriter, r *http.Request) {
 	buf.WriteTo(w)
 }
 
-func (h *Handler) Context(next http.HandlerFunc) http.HandlerFunc {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		ctx := context.WithValue(r.Context(), "key", "value")
-		next.ServeHTTP(w, r.WithContext(ctx))
-	})
+func (h *Handler) search(search string, w http.ResponseWriter, r *http.Request) {
+
+}
+
+func (h *Handler) filter(filter string, w http.ResponseWriter, err error, code int) {
+
 }
