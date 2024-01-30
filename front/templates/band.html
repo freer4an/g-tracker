@@ -5,16 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/css/style.css">
-    <link rel="stylesheet" href="/static/css/index.css">
+    <link rel="stylesheet" href="/static/css/band.css">
     <link rel="shortcut icon" href="/static/img/favicon.png">
     <script src="/static/js/script.js"></script>
     <title>Groupie-Tracker</title>
 </head>
 <body>
     {{ define "Band" }}
-    <a href="band/{{ .ID }}" class="band-image">
-        <img src="{{ .Image }}" alt="{{ .Name }}">
-    </a>
+    <img class="band-image" src="{{ .Image }}" alt="{{ .Name }}">
     <h1>{{ .Name }}</h1>
     <div class="band-info">
         <div class="band-members">
@@ -29,5 +27,8 @@
     </div>
     {{end}}
     {{ template "Band" .Band}}
+    <div class="band-relations">
+        {{template "Relations" .Relation }}
+    </div>
 </body>
 </html>

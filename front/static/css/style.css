@@ -5,13 +5,10 @@ a {
 header {
     display: flex;
     justify-content: space-around;
+    align-items: center;
 }
 
 #navbar {
-    margin: 0 auto;
-    max-width: 1600px;
-    width: 100%;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-around;
 }

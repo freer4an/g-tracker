@@ -25,7 +25,10 @@
     <section id="container">
         {{range $index, $band := .API.Bands}}
         <div class="container-band">
-            {{template "Band" $band}}
+            <a href="band/{{ $band.ID }}">
+                <img class="band-image" src="{{ $band.Image }}" alt="{{ $band.Name }}">
+            </a>
+            <h1>{{ $band.Name }}</h1>
             <div class="band-relations">
                 {{template "Relations" (index $rels $index) }}
             </div>

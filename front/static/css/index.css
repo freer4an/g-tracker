@@ -4,17 +4,14 @@
     width: 100%;
     display: flex;
     flex-wrap: wrap;
-    justify-content: left;
+    justify-content: center;
 }
 
 .container-band {
     border: 1px solid #ccc;
     text-align: center;
+    width: 300px;
     word-wrap: break-word;
-}
-
-.container-band h1 {
-    overflow-wrap: break-word;
 }
 
 .band-info {
@@ -37,3 +34,6 @@
     border: 1px solid #ddd;
 }
 
+.band-image {
+    margin-top: 10px;
+}
