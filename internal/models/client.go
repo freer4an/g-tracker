@@ -1,14 +1,14 @@
 package models
 
 import (
+	"errors"
 	"fmt"
-	"time"
-
-	"github.com/freer4an/groupie-tracker/internal/helpers"
 )
 
-// var ticker = make(chan time.Time)
-var ticker = time.Tick(10 * time.Second)
+// errors
+var (
+	ErrID = errors.New("Invalid id")
+)
 
 type clientData struct {
 	API      *api
@@ -17,9 +17,6 @@ type clientData struct {
 }
 
 func GetHomeData() (*clientData, error) {
-	defer func() {
-		go updateChecker()
-	}()
 	if apiData == nil {
 		apiData = new(api)
 		if err := apiData.fill(); err != nil {
@@ -28,6 +25,12 @@ func GetHomeData() (*clientData, error) {
 	}
 
 	data := &clientData{API: apiData}
+
+	select {
+	case <-ticker:
+		go updateChecker()
+	default:
+	}
 
 	return data, nil
 }
@@ -41,38 +44,10 @@ func GetBandData(id int) (*clientData, error) {
 	}
 	id = id - 1
 	if !apiData.CheckID(id) {
-		return nil, fmt.Errorf("Invalid id: %d", id)
+		return nil, fmt.Errorf("%w - %d", ErrID, id)
 	}
 	return &clientData{
 		Band:     apiData.Bands[id],
 		Relation: apiData.Relations[id],
 	}, nil
 }
-
-func updateChecker() {
-	select {
-	case <-ticker:
-		if apiData == nil {
-			return
-		}
-		data := new(api)
-		if err := helpers.ParseAPI(apiURL+artistURL, &data.Bands); err != nil {
-			return
-		}
-		if data.len != apiData.len {
-			apiData.mu.Lock()
-			defer apiData.mu.Unlock()
-			if err := apiData.fill(); err != nil {
-				return
-			}
-		}
-	default:
-		return
-	}
-}
-
-// func init() {
-// 	go func() {
-// 		var ticker = time.Tick(10 * time.Second)
-// 	}()
-// }

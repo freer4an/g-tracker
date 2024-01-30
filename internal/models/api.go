@@ -3,6 +3,7 @@ package models
 import (
 	"fmt"
 	"sync"
+	"time"
 
 	"github.com/freer4an/groupie-tracker/internal/helpers"
 )
@@ -15,6 +16,7 @@ const (
 
 var (
 	apiData *api
+	ticker  = time.Tick(10 * time.Second)
 )
 
 type api struct {
@@ -31,10 +33,6 @@ func (d *api) CheckID(index int) bool {
 func (data *api) fill() error {
 	data.mu.Lock()
 	defer data.mu.Unlock()
-	if data.Bands != nil && data.Relations != nil {
-		return nil
-	}
-
 	var rel Relations
 	if err := helpers.ParseAPI(apiURL+artistURL, &data.Bands); err != nil {
 		return fmt.Errorf("Bands parse error: %w", err)
@@ -45,4 +43,18 @@ func (data *api) fill() error {
 	data.Relations = rel.Index
 	data.len = len(data.Bands)
 	return nil
+}
+
+func updateChecker() {
+	if apiData == nil {
+		return
+	}
+	data := new(api)
+	if err := helpers.ParseAPI(apiURL+artistURL, &data.Bands); err != nil {
+		return
+	}
+	if data.len == apiData.len {
+		return
+	}
+	apiData.fill()
 }
